@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { ChangeEvent, SelectChangeEvent } from "react";
+import type { ChangeEvent } from "react";
 import {
   Search,
   Plus,
@@ -209,8 +209,6 @@ const tieneUbicacion = (afectado: Afectado): boolean => {
   );
 };
 
-/* Genera los números de página a mostrar con ellipsis.
- * Siempre incluye: primera, última, actual, y vecinos de la actual. */
 const generarPaginasVisibles = (
   actual: number,
   total: number
@@ -385,7 +383,6 @@ export default function CrudAfectados() {
     [afectadosFiltrados.length]
   );
 
-  // Ajuste defensivo: si la página actual excede el total tras eliminar
   useEffect(() => {
     if (paginaActual > totalPaginas && totalPaginas > 0) {
       setPaginaActual(totalPaginas);
@@ -689,7 +686,7 @@ export default function CrudAfectados() {
 
             <select
               value={filtroZona}
-              onChange={(e: SelectChangeEvent<HTMLSelectElement>) =>
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                 setFiltroZona(e.target.value)
               }
               className="rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"
@@ -704,7 +701,7 @@ export default function CrudAfectados() {
 
             <select
               value={filtroEstatus}
-              onChange={(e: SelectChangeEvent<HTMLSelectElement>) =>
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                 setFiltroEstatus(e.target.value)
               }
               className="rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"
@@ -719,7 +716,7 @@ export default function CrudAfectados() {
 
             <select
               value={filtroDanios}
-              onChange={(e: SelectChangeEvent<HTMLSelectElement>) =>
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                 setFiltroDanios(e.target.value)
               }
               className="rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"
@@ -735,7 +732,7 @@ export default function CrudAfectados() {
             <div className="md:col-span-2 lg:col-span-1">
               <select
                 value={filtroUbicacion}
-                onChange={(e: SelectChangeEvent<HTMLSelectElement>) =>
+                onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                   setFiltroUbicacion(e.target.value as FiltroUbicacion)
                 }
                 className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"
@@ -943,7 +940,9 @@ export default function CrudAfectados() {
                   </label>
                   <select
                     value={formulario.estatus ?? ""}
-                    onChange={(e) => cambiarCampo("estatus", e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                      cambiarCampo("estatus", e.target.value)
+                    }
                     className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"
                   >
                     <option value="">Seleccionar</option>
@@ -961,7 +960,9 @@ export default function CrudAfectados() {
                   </label>
                   <select
                     value={formulario.nivel_danios ?? ""}
-                    onChange={(e) => cambiarCampo("nivel_danios", e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                      cambiarCampo("nivel_danios", e.target.value)
+                    }
                     className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"
                   >
                     <option value="">Seleccionar</option>
@@ -1087,7 +1088,6 @@ function Paginacion({
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-200 bg-slate-50 px-4 py-3 sm:px-6 sm:py-4">
-      {/* Info */}
       <p className="text-xs sm:text-sm text-slate-600 text-center sm:text-left">
         Página <strong className="text-slate-900">{paginaActual}</strong> de{" "}
         <strong className="text-slate-900">{totalPaginas}</strong>
@@ -1096,9 +1096,7 @@ function Paginacion({
         </span>
       </p>
 
-      {/* Controles */}
       <nav aria-label="Paginación" className="flex items-center gap-1.5">
-        {/* Primera y Anterior (ocultos en móvil muy pequeño si no hay espacio) */}
         <button
           type="button"
           onClick={onPrimera}
@@ -1120,7 +1118,6 @@ function Paginacion({
           <span className="ml-1 hidden sm:inline">Anterior</span>
         </button>
 
-        {/* Números de página (solo desktop) */}
         <div className="hidden sm:flex items-center gap-1">
           {paginasVisibles.map((p, idx) => {
             if (typeof p === "string") {
@@ -1151,7 +1148,6 @@ function Paginacion({
           })}
         </div>
 
-        {/* Siguiente y Última */}
         <button
           type="button"
           onClick={onSiguiente}
