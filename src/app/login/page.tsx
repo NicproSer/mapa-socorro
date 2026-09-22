@@ -39,15 +39,14 @@ function LoginForm() {
                     setError(error.message);
                 } else {
                     setMessage('Registro exitoso. Por favor verifica tu email.');
+                    // No redirigir inmediatamente después del registro
                 }
             } else {
                 const { error } = await signIn(email, password);
                 if (error) {
                     setError(error.message);
-                } else {
-                    const redirect = searchParams.get('redirect') || '/mapa';
-                    router.push(redirect);
                 }
+                // No redirigir aquí, dejar que el useEffect lo haga cuando user se actualice
             }
         } catch (err) {
             setError('Ocurrió un error inesperado');
